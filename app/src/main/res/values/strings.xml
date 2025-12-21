@@ -23,4 +23,9 @@
     <string name="picto_school">Colegio</string>
     <string name="picto_wash_hands">Lavar manos</string>
     <string name="picto_play">Jugar</string>
+
+    <string name="added_steps">Pasos añadidos:</string>
+    <string name="steps_selected">Selecciona pasos:</string>
+
+
 </resources>

@@ -23,4 +23,7 @@
     <string name="picto_school">School</string>
     <string name="picto_wash_hands">Wash hands</string>
     <string name="picto_play">Play</string>
+
+    <string name="added_steps">Added steps:</string>
+    <string name="steps_selected">Select steps:</string>
 </resources>
