@@ -104,7 +104,6 @@ public class RoutineRepository {
 
         if (cursor != null && cursor.moveToFirst()) {
             // Creamos el objeto Routine con los datos de la base de datos
-            // Asegúrate de que los índices (0, 1) coinciden con tus columnas id y name
             routine = new Routine(cursor.getLong(0), cursor.getString(1));
             cursor.close();
         }
@@ -136,7 +135,7 @@ public class RoutineRepository {
     public void updateRoutineWithSteps(long routineId, String nuevoNombre, List<Step> nuevosPasos) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Iniciamos una transacción para que se guarde todo o nada
+        // Iniciamos una transacción para que guarde
         db.beginTransaction();
         try {
             // 1. Actualizar el nombre de la rutina

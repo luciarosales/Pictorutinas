@@ -67,8 +67,6 @@ public class EditRoutineActivity extends AppCompatActivity {
             finish();
         }
 
-
-
         // 4. Botón de Actualizar
         findViewById(R.id.btnUpdate).setOnClickListener(v -> updateRoutine());
     }
@@ -99,7 +97,6 @@ public class EditRoutineActivity extends AppCompatActivity {
         }
 
         // Guardamos los cambios
-        // Nota: Asegúrate de que tu repositorio tenga un método para actualizar rutina Y sus pasos
         repo.updateRoutineWithSteps(routineId, name, selectedSteps);
 
         Toast.makeText(this, R.string.routine_updated, Toast.LENGTH_SHORT).show();

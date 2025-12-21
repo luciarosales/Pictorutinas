@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Inicialización de componentes (Mezcla de ambos)
+
         repo = new RoutineRepository(this);
         rv = findViewById(R.id.rvRoutines);
         etSearch = findViewById(R.id.etSearchQuery);
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        // Buscador (Funcionalidad de compañera)
+
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Botón añadir (Ambas lo teníais)
+
         findViewById(R.id.fabAdd).setOnClickListener(v ->
                 startActivity(new Intent(this, CreateRoutineActivity.class)));
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateRecyclerView(List<Routine> list) {
-        // Gestión de estado vacío (Compañera)
+
         if (list.isEmpty()) {
             llEmptyState.setVisibility(View.VISIBLE);
             rv.setVisibility(View.GONE);
@@ -85,20 +85,20 @@ public class MainActivity extends AppCompatActivity {
             rv.setVisibility(View.VISIBLE);
         }
 
-        // Configuración del Adaptador (Aquí mezclamos los 3 clicks)
+
         RoutineAdapter adapter = new RoutineAdapter(
                 list,
-                r -> { // 1. Click Normal: VER (Tu funcionalidad)
+                r -> {
                     Intent i = new Intent(this, ViewRoutineActivity.class);
                     i.putExtra("id", r.getId());
                     i.putExtra("name", r.getName());
                     startActivity(i);
                 },
-                r -> { // 2. Click Largo: BORRAR (Compañera)
+                r -> {
                     showDeleteDialog(r);
                     return true;
                 },
-                (Routine r) -> { // 3. Click en Lápiz: EDITAR (Tu funcionalidad nueva)
+                (Routine r) -> {
                     Intent i = new Intent(this, EditRoutineActivity.class);
                     i.putExtra("routine_id", r.getId());
                     startActivity(i);
