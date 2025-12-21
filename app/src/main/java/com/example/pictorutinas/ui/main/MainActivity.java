@@ -2,7 +2,10 @@ package com.example.pictorutinas.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +24,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private RoutineRepository repo;
     private RecyclerView rv;
+    private EditText etSearch;
+    private View llEmptyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,23 @@ public class MainActivity extends AppCompatActivity {
 
         repo = new RoutineRepository(this);
         rv = findViewById(R.id.rvRoutines);
+        etSearch = findViewById(R.id.etSearchQuery);
+        llEmptyState = findViewById(R.id.llEmptyState);
+
         rv.setLayoutManager(new LinearLayoutManager(this));
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterRoutines(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         findViewById(R.id.fabAdd).setOnClickListener(v ->
                 startActivity(new Intent(this, CreateRoutineActivity.class)));
@@ -37,21 +58,38 @@ public class MainActivity extends AppCompatActivity {
         loadData();
     }
 
+    private void filterRoutines(String query) {
+        List<Routine> filteredList = repo.searchRoutinesByName(query);
+        updateRecyclerView(filteredList);
+    }
 
     private void loadData() {
-        List<Routine> routines = repo.getAllRoutines();
+        try {
+            String query = etSearch.getText().toString();
+            List<Routine> routines;
 
-        // Control de estado vacío
-        View emptyState = findViewById(R.id.llEmptyState);
-        if (routines.isEmpty()) {
-            emptyState.setVisibility(View.VISIBLE);
+            if (query.isEmpty()) {
+                routines = repo.getAllRoutines();
+            } else {
+                routines = repo.searchRoutinesByName(query);
+            }
+
+            updateRecyclerView(routines);
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.error_db, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateRecyclerView(List<Routine> list) {
+        if (list.isEmpty()) {
+            llEmptyState.setVisibility(View.VISIBLE);
             rv.setVisibility(View.GONE);
         } else {
-            emptyState.setVisibility(View.GONE);
+            llEmptyState.setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
         }
 
-        RoutineAdapter adapter = new RoutineAdapter(routines,
+        RoutineAdapter adapter = new RoutineAdapter(list,
                 r -> {
                     Intent i = new Intent(this, ViewRoutineActivity.class);
                     i.putExtra("id", r.getId());
@@ -60,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 },
                 r -> {
                     showDeleteDialog(r);
-
                 });
         rv.setAdapter(adapter);
     }
@@ -68,15 +105,14 @@ public class MainActivity extends AppCompatActivity {
     private void showDeleteDialog(Routine r) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.delete_confirm)
+                .setMessage(R.string.delete_confirm_msg)
                 .setPositiveButton(R.string.delete, (d, w) -> {
                     try {
                         repo.deleteRoutine(r.getId());
-
                         loadData();
-
                         Snackbar.make(rv, R.string.routine_deleted, Snackbar.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        Toast.makeText(this, "No se pudo eliminar la rutina", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.error_delete, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)

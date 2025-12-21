@@ -36,4 +36,8 @@
 
     <string name="no_routines_yet">¡Aún no tienes rutinas!</string>
     <string name="create_first_routine">Pulsa el botón + para crear la primera.</string>
+
+    <string name="search_routine">Buscar rutina</string>
+    <string name="search_hint">Escribe el nombre...</string>
+    <string name="no_results">No se encontraron rutinas</string>
 </resources>

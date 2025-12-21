@@ -59,4 +59,26 @@ public class RoutineRepository {
     public void deleteRoutine(long id) {
         dbHelper.getWritableDatabase().delete("rutinas", "id=?", new String[]{String.valueOf(id)});
     }
+
+    public List<Routine> searchRoutinesByName(String query) {
+        List<Routine> list = new ArrayList<>();
+        String selection = "nombre LIKE ?";
+        String[] selectionArgs = new String[]{"%" + query + "%"};
+
+        Cursor c = dbHelper.getReadableDatabase().query(
+                "rutinas",
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                "created_at DESC"
+        );
+
+        while (c.moveToNext()) {
+            list.add(new Routine(c.getLong(0), c.getString(1)));
+        }
+        c.close();
+        return list;
+    }
 }
