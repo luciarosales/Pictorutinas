@@ -33,4 +33,7 @@
     <string name="error_db">Error al acceder a la base de datos</string>
     <string name="my_routines">MIS RUTINAS</string>
     <string name="motivation_text">Recuerda: seguir tu rutina te ayuda a estar más tranquilo y seguro.</string>
+
+    <string name="no_routines_yet">¡Aún no tienes rutinas!</string>
+    <string name="create_first_routine">Pulsa el botón + para crear la primera.</string>
 </resources>

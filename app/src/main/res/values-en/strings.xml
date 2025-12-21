@@ -33,4 +33,7 @@
     <string name="error_db">Database access error</string>
     <string name="my_routines">MY ROUTINES</string>
     <string name="motivation_text">Remember: following your routine helps you to be calm and safe.</string>
+
+    <string name="no_routines_yet">No routines yet!</string>
+    <string name="create_first_routine">Tap the + button to create your first one.</string>
 </resources>
