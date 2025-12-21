@@ -3,6 +3,7 @@ package com.example.pictorutinas.ui.main;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,15 +14,15 @@ import java.util.List;
 public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHolder> {
     private final List<Routine> list;
     private final OnRoutineClickListener listener;
-    private final OnRoutineLongClickListener longListener;
+    private final OnDeleteClickListener deleteListener;
 
     public interface OnRoutineClickListener { void onClick(Routine r); }
-    public interface OnRoutineLongClickListener { boolean onLongClick(Routine r); }
+    public interface OnDeleteClickListener { void onDelete(Routine r); }
 
-    public RoutineAdapter(List<Routine> list, OnRoutineClickListener l, OnRoutineLongClickListener ll) {
+    public RoutineAdapter(List<Routine> list, OnRoutineClickListener l, OnDeleteClickListener dl) {
         this.list = list;
         this.listener = l;
-        this.longListener = ll;
+        this.deleteListener = dl;
     }
 
     @NonNull
@@ -36,7 +37,8 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         Routine r = list.get(position);
         holder.tv.setText(r.getName());
         holder.itemView.setOnClickListener(v -> listener.onClick(r));
-        holder.itemView.setOnLongClickListener(v -> longListener.onLongClick(r));
+
+        holder.btnDelete.setOnClickListener(v -> deleteListener.onDelete(r));
     }
 
     @Override
@@ -44,6 +46,11 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv;
-        ViewHolder(View v) { super(v); tv = v.findViewById(R.id.tvRoutineName); }
+        ImageButton btnDelete;
+        ViewHolder(View v) {
+            super(v);
+            tv = v.findViewById(R.id.tvRoutineName);
+            btnDelete = v.findViewById(R.id.btnDeleteRoutine);
+        }
     }
 }

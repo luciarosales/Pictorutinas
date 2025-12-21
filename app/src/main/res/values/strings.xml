@@ -27,5 +27,8 @@
     <string name="added_steps">Pasos añadidos:</string>
     <string name="steps_selected">Selecciona pasos:</string>
 
-
+    <string name="delete_confirm_title">¿Eliminar rutina?</string>
+    <string name="delete_confirm_msg">¿Estás seguro de que quieres borrar esta rutina y todos sus pasos?</string>
+    <string name="error_delete">Error al intentar eliminar la rutina</string>
+    <string name="error_db">Error al acceder a la base de datos</string>
 </resources>
