@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAFAFA"
     tools:context=".ui.main.MainActivity">
 
     <ImageView
@@ -21,15 +22,57 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
-        android:text="MIS RUTINAS"
+        android:text="@string/my_routines"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#444444"
-        android:letterSpacing="0.1"
+        android:textColor="#333333"
+        android:letterSpacing="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivHeader" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardQuote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="#E1BEE7"
+        app:cardBackgroundColor="#F3E5F5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✨"
+                android:textSize="20sp"
+                android:layout_marginEnd="12dp"/>
+
+            <TextView
+                android:id="@+id/tvDailyQuote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/motivation_text"
+                android:textColor="#6A1B9A"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:lineSpacingExtra="2dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRoutines"
@@ -37,12 +80,13 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:paddingHorizontal="12dp"
+        android:paddingBottom="80dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/cardQuote"
         tools:listitem="@android:layout/simple_list_item_1" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -50,10 +94,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:contentDescription="@string/create_routine"
+        android:contentDescription="Crear rutina"
         app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="#D1C4E9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white" />
+        app:tint="#6A1B9A" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,4 +31,6 @@
     <string name="delete_confirm_msg">¿Estás seguro de que quieres borrar esta rutina y todos sus pasos?</string>
     <string name="error_delete">Error al intentar eliminar la rutina</string>
     <string name="error_db">Error al acceder a la base de datos</string>
+    <string name="my_routines">MIS RUTINAS</string>
+    <string name="motivation_text">Recuerda: seguir tu rutina te ayuda a estar más tranquilo y seguro.</string>
 </resources>

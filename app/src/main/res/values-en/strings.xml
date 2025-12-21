@@ -31,4 +31,6 @@
     <string name="delete_confirm_msg">Are you sure you want to delete this routine and all its steps?</string>
     <string name="error_delete">Error while trying to delete the routine</string>
     <string name="error_db">Database access error</string>
+    <string name="my_routines">MY ROUTINES</string>
+    <string name="motivation_text">Remember: following your routine helps you to be calm and safe.</string>
 </resources>
