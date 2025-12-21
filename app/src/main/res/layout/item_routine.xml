@@ -24,6 +24,14 @@
             android:textColor="?attr/colorOnSurface" />
 
         <ImageButton
+            android:id="@+id/btnEditRoutine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_edit"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/Edit" />
+
+        <ImageButton
             android:id="@+id/btnDeleteRoutine"
             android:layout_width="48dp"
             android:layout_height="48dp"

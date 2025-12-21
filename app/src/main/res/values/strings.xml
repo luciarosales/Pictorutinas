@@ -40,4 +40,11 @@
     <string name="search_routine">Buscar rutina</string>
     <string name="search_hint">Escribe el nombre...</string>
     <string name="no_results">No se encontraron rutinas</string>
+
+    <string name="Edit">Editar</string>
+    <string name="edit_routine">Modificar Rutina</string>
+    <string name="error_empty_name">El nombre de la rutina no puede estar vacío</string>
+    <string name="error_title">Atención</string>
+    <string name="ok">Aceptar</string>
+    <string name="routine_updated">Rutina actualizada correctamente</string>
 </resources>

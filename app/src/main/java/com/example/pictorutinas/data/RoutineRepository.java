@@ -56,8 +56,59 @@ public class RoutineRepository {
         return list;
     }
 
+    public List<Step> getStepsByRoutineId(long routineId) {
+        List<Step> list = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Consultamos la tabla "pasos" usando "rutina_id" como filtro
+        Cursor c = db.query("pasos", null, "rutina_id = ?",
+                new String[]{String.valueOf(routineId)}, null, null, "orden ASC");
+
+        if (c != null && c.moveToFirst()) {
+            do {
+                // Índices según tu onCreate: 0:id, 1:rutina_id, 2:texto_key, 3:imagen_res, 4:orden
+                long id = c.getLong(0);
+                String texto = c.getString(2);
+                String imagen = c.getString(3);
+
+                list.add(new Step(texto, imagen));
+            } while (c.moveToNext());
+            c.close();
+        }
+        return list;
+    }
+
+    public void updateRoutine(long id, String nuevoNombre) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // ContentValues es como un contenedor para los datos que vamos a actualizar
+        ContentValues values = new ContentValues();
+        values.put("nombre", nuevoNombre); // "nombre" es el nombre de tu columna en la DB
+
+        // Ejecutamos la actualización
+        // El tercer parámetro "id=?" es el filtro para que solo actualice ESA rutina
+        db.update("rutinas", values, "id=?", new String[]{String.valueOf(id)});
+    }
+
     public void deleteRoutine(long id) {
         dbHelper.getWritableDatabase().delete("rutinas", "id=?", new String[]{String.valueOf(id)});
+    }
+
+    public Routine getRoutineById(long id) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Routine routine = null;
+
+        // Consultamos la tabla de rutinas buscando por el ID
+        Cursor cursor = db.query("rutinas", null, "id = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // Creamos el objeto Routine con los datos de la base de datos
+            // Asegúrate de que los índices (0, 1) coinciden con tus columnas id y name
+            routine = new Routine(cursor.getLong(0), cursor.getString(1));
+            cursor.close();
+        }
+        return routine;
     }
 
     public List<Routine> searchRoutinesByName(String query) {
@@ -80,5 +131,36 @@ public class RoutineRepository {
         }
         c.close();
         return list;
+    }
+
+    public void updateRoutineWithSteps(long routineId, String nuevoNombre, List<Step> nuevosPasos) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Iniciamos una transacción para que se guarde todo o nada
+        db.beginTransaction();
+        try {
+            // 1. Actualizar el nombre de la rutina
+            ContentValues values = new ContentValues();
+            values.put("nombre", nuevoNombre);
+            db.update("rutinas", values, "id = ?", new String[]{String.valueOf(routineId)});
+
+            // 2. Borrar los pasos antiguos de esta rutina
+            db.delete("pasos", "rutina_id = ?", new String[]{String.valueOf(routineId)});
+
+            // 3. Insertar los nuevos pasos (los que están ahora en la lista)
+            for (int i = 0; i < nuevosPasos.size(); i++) {
+                Step s = nuevosPasos.get(i);
+                ContentValues stepValues = new ContentValues();
+                stepValues.put("rutina_id", routineId);
+                stepValues.put("texto_key", s.getTextKey());
+                stepValues.put("imagen_res", s.getImageResName());
+                stepValues.put("orden", i); // Guardamos el orden actual
+                db.insert("pasos", null, stepValues);
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 }

@@ -15,14 +15,18 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     private final List<Routine> list;
     private final OnRoutineClickListener listener;
     private final OnDeleteClickListener deleteListener;
+    private final OnEditClickListener editListener;
 
     public interface OnRoutineClickListener { void onClick(Routine r); }
-    public interface OnDeleteClickListener { void onDelete(Routine r); }
+    public interface OnDeleteClickListener { boolean onDelete(Routine r); }
 
-    public RoutineAdapter(List<Routine> list, OnRoutineClickListener l, OnDeleteClickListener dl) {
+    public interface OnEditClickListener { void onEdit(Routine r); }
+
+    public RoutineAdapter(List<Routine> list, OnRoutineClickListener l, OnDeleteClickListener dl, OnEditClickListener el) {
         this.list = list;
         this.listener = l;
         this.deleteListener = dl;
+        this.editListener = el;
     }
 
     @NonNull
@@ -39,6 +43,8 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         holder.itemView.setOnClickListener(v -> listener.onClick(r));
 
         holder.btnDelete.setOnClickListener(v -> deleteListener.onDelete(r));
+
+        holder.btnEdit.setOnClickListener(v -> editListener.onEdit(r));
     }
 
     @Override
@@ -47,10 +53,14 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv;
         ImageButton btnDelete;
+
+        ImageButton btnEdit;
+
         ViewHolder(View v) {
             super(v);
             tv = v.findViewById(R.id.tvRoutineName);
             btnDelete = v.findViewById(R.id.btnDeleteRoutine);
+            btnEdit = v.findViewById(R.id.btnEditRoutine);
         }
     }
 }

@@ -16,7 +16,8 @@ import com.example.pictorutinas.R;
 import com.example.pictorutinas.data.RoutineRepository;
 import com.example.pictorutinas.model.Routine;
 import com.example.pictorutinas.ui.create.CreateRoutineActivity;
-import com.example.pictorutinas.ui.view.ViewRoutineActivity;
+import com.example.pictorutinas.ui.create.EditRoutineActivity; // Tu clase de edición
+import com.example.pictorutinas.ui.view.ViewRoutineActivity; // Tu clase de visualización
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Inicialización de componentes (Mezcla de ambos)
         repo = new RoutineRepository(this);
         rv = findViewById(R.id.rvRoutines);
         etSearch = findViewById(R.id.etSearchQuery);
@@ -39,19 +41,19 @@ public class MainActivity extends AppCompatActivity {
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        // Buscador (Funcionalidad de compañera)
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filterRoutines(s.toString());
             }
-
             @Override
             public void afterTextChanged(Editable s) {}
         });
 
+        // Botón añadir (Ambas lo teníais)
         findViewById(R.id.fabAdd).setOnClickListener(v ->
                 startActivity(new Intent(this, CreateRoutineActivity.class)));
 
@@ -66,14 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadData() {
         try {
             String query = etSearch.getText().toString();
-            List<Routine> routines;
-
-            if (query.isEmpty()) {
-                routines = repo.getAllRoutines();
-            } else {
-                routines = repo.searchRoutinesByName(query);
-            }
-
+            List<Routine> routines = query.isEmpty() ? repo.getAllRoutines() : repo.searchRoutinesByName(query);
             updateRecyclerView(routines);
         } catch (Exception e) {
             Toast.makeText(this, R.string.error_db, Toast.LENGTH_SHORT).show();
@@ -81,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateRecyclerView(List<Routine> list) {
+        // Gestión de estado vacío (Compañera)
         if (list.isEmpty()) {
             llEmptyState.setVisibility(View.VISIBLE);
             rv.setVisibility(View.GONE);
@@ -89,16 +85,25 @@ public class MainActivity extends AppCompatActivity {
             rv.setVisibility(View.VISIBLE);
         }
 
-        RoutineAdapter adapter = new RoutineAdapter(list,
-                r -> {
+        // Configuración del Adaptador (Aquí mezclamos los 3 clicks)
+        RoutineAdapter adapter = new RoutineAdapter(
+                list,
+                r -> { // 1. Click Normal: VER (Tu funcionalidad)
                     Intent i = new Intent(this, ViewRoutineActivity.class);
                     i.putExtra("id", r.getId());
                     i.putExtra("name", r.getName());
                     startActivity(i);
                 },
-                r -> {
+                r -> { // 2. Click Largo: BORRAR (Compañera)
                     showDeleteDialog(r);
-                });
+                    return true;
+                },
+                (Routine r) -> { // 3. Click en Lápiz: EDITAR (Tu funcionalidad nueva)
+                    Intent i = new Intent(this, EditRoutineActivity.class);
+                    i.putExtra("routine_id", r.getId());
+                    startActivity(i);
+                }
+        );
         rv.setAdapter(adapter);
     }
 
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.delete, (d, w) -> {
                     try {
                         repo.deleteRoutine(r.getId());
-                        loadData();
+                        loadData(); // Refrescar lista
                         Snackbar.make(rv, R.string.routine_deleted, Snackbar.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Toast.makeText(this, R.string.error_delete, Toast.LENGTH_SHORT).show();

@@ -40,4 +40,11 @@
     <string name="search_routine">Search routine</string>
     <string name="search_hint">Type the name...</string>
     <string name="no_results">No routines found</string>
+
+    <string name="Edit">Edit</string>
+    <string name="edit_routine">Upload Routine</string>
+    <string name="error_empty_name">Routine name cannot be empty</string>
+    <string name="error_title">Attention</string>
+    <string name="ok">OK</string>
+    <string name="routine_updated">Routine updated successfully</string>
 </resources>
