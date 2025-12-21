@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pictorutinas</string>
+    <string name="create_routine">New Routine</string>
+    <string name="routine_name_hint">Routine name...</string>
+    <string name="save">Save</string>
+    <string name="delete_confirm">Delete this routine?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="routine_deleted">Routine deleted</string>
+    <string name="routine_saved">Routine saved</string>
+    <string name="error_validation">Missing data</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="completed">Finished!</string>
+    <string name="step_x_of_n">Step %1$d of %2$d</string>
+    <string name="no_steps">No steps</string>
+    <string name="picto_brush_teeth">Brush teeth</string>
+    <string name="picto_shower">Shower</string>
+    <string name="picto_eat">Eat</string>
+    <string name="picto_sleep">Sleep</string>
+    <string name="picto_dress">Get dressed</string>
+    <string name="picto_school">School</string>
+    <string name="picto_wash_hands">Wash hands</string>
+    <string name="picto_play">Play</string>
+</resources>
