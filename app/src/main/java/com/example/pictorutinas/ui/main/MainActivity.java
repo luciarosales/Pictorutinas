@@ -2,6 +2,7 @@ package com.example.pictorutinas.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,22 +39,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void loadData() {
-        try {
-            List<Routine> routines = repo.getAllRoutines();
-            RoutineAdapter adapter = new RoutineAdapter(routines,
-                    r -> {
-                        Intent i = new Intent(this, ViewRoutineActivity.class);
-                        i.putExtra("id", r.getId());
-                        i.putExtra("name", r.getName());
-                        startActivity(i);
-                    },
-                    r -> {
-                        showDeleteDialog(r);
-                    });
-            rv.setAdapter(adapter);
-        } catch (Exception e) {
-            Toast.makeText(this, R.string.error_db, Toast.LENGTH_SHORT).show();
+        List<Routine> routines = repo.getAllRoutines();
+
+        // Control de estado vacío
+        View emptyState = findViewById(R.id.llEmptyState);
+        if (routines.isEmpty()) {
+            emptyState.setVisibility(View.VISIBLE);
+            rv.setVisibility(View.GONE);
+        } else {
+            emptyState.setVisibility(View.GONE);
+            rv.setVisibility(View.VISIBLE);
         }
+
+        RoutineAdapter adapter = new RoutineAdapter(routines,
+                r -> {
+                    Intent i = new Intent(this, ViewRoutineActivity.class);
+                    i.putExtra("id", r.getId());
+                    i.putExtra("name", r.getName());
+                    startActivity(i);
+                },
+                r -> {
+                    showDeleteDialog(r);
+                    return true;
+                });
+        rv.setAdapter(adapter);
     }
 
     private void showDeleteDialog(Routine r) {
