@@ -1,6 +1,8 @@
 package com.example.pictorutinas.ui.view;
 
 import android.os.Bundle;
+import android.os.Handler;      // Necesario para el retraso
+import android.os.Looper;       // Necesario para el retraso
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +30,10 @@ public class ViewRoutineActivity extends AppCompatActivity {
         steps = new RoutineRepository(this).getStepsForRoutine(id);
 
         if (steps.isEmpty()) {
-            new AlertDialog.Builder(this).setMessage(R.string.no_steps).setPositiveButton("OK", (d, w) -> finish()).show();
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.no_steps)
+                    .setPositiveButton("OK", (d, w) -> finish())
+                    .show();
             return;
         }
 
@@ -40,18 +45,50 @@ public class ViewRoutineActivity extends AppCompatActivity {
 
         updateUI();
 
+        // Configuración del botón Siguiente / Finalizar
         btnNext.setOnClickListener(v -> {
-            if (index < steps.size() - 1) { index++; updateUI(); }
-            else { Snackbar.make(img, R.string.completed, Snackbar.LENGTH_LONG).show(); }
+            if (index < steps.size() - 1) {
+                // Si quedan pasos, avanzamos normalmente
+                index++;
+                updateUI();
+            } else {
+                // Si es el último paso, mostramos notificación y volvemos al inicio
+                Snackbar.make(img, R.string.completed, Snackbar.LENGTH_LONG).show();
+
+                // Deshabilitamos botones para evitar múltiples clics durante la espera
+                btnNext.setEnabled(false);
+                btnPrev.setEnabled(false);
+
+                // Esperamos 2 segundos para que el usuario lea el mensaje y cerramos
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    finish(); // Cierra esta actividad y vuelve a MainActivity
+                }, 2000);
+            }
         });
-        btnPrev.setOnClickListener(v -> { if (index > 0) { index--; updateUI(); } });
+
+        // Configuración del botón Anterior
+        btnPrev.setOnClickListener(v -> {
+            if (index > 0) {
+                index--;
+                updateUI();
+            }
+        });
     }
 
     private void updateUI() {
         Step s = steps.get(index);
-        img.setImageResource(getResources().getIdentifier(s.getImageResName(), "drawable", getPackageName()));
-        tvDesc.setText(getString(getResources().getIdentifier(s.getTextKey(), "string", getPackageName())));
+
+        // Carga dinámica de la imagen y el texto
+        int imageResId = getResources().getIdentifier(s.getImageResName(), "drawable", getPackageName());
+        int textResId = getResources().getIdentifier(s.getTextKey(), "string", getPackageName());
+
+        img.setImageResource(imageResId);
+        tvDesc.setText(getString(textResId));
+
+        // Actualiza el contador (ej: "Paso 1 de 5")
         tvCount.setText(getString(R.string.step_x_of_n, index + 1, steps.size()));
+
+        // Solo habilitamos el botón atrás si no estamos en el primer paso
         btnPrev.setEnabled(index > 0);
     }
 }
