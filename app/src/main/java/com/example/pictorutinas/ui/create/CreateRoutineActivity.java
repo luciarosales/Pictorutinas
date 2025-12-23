@@ -23,6 +23,11 @@ public class CreateRoutineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_routine);
 
+        //Flecha hacia atrás
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         etName = findViewById(R.id.etRoutineName);
         RecyclerView rvPictos = findViewById(R.id.rvAvailablePictos);
         RecyclerView rvSelected = findViewById(R.id.rvSelectedSteps);
@@ -59,5 +64,11 @@ public class CreateRoutineActivity extends AppCompatActivity {
         String[] keys = {"picto_brush_teeth", "picto_shower", "picto_eat", "picto_sleep", "picto_dress", "picto_school", "picto_wash_hands", "picto_play"};
         for (String k : keys) list.add(new Step(k, k));
         return list;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
