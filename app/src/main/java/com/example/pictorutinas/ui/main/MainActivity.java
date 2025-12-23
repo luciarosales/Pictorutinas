@@ -16,8 +16,8 @@ import com.example.pictorutinas.R;
 import com.example.pictorutinas.data.RoutineRepository;
 import com.example.pictorutinas.model.Routine;
 import com.example.pictorutinas.ui.create.CreateRoutineActivity;
-import com.example.pictorutinas.ui.create.EditRoutineActivity; // Tu clase de edición
-import com.example.pictorutinas.ui.view.ViewRoutineActivity; // Tu clase de visualización
+import com.example.pictorutinas.ui.create.EditRoutineActivity;
+import com.example.pictorutinas.ui.view.ViewRoutineActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.delete, (d, w) -> {
                     try {
                         repo.deleteRoutine(r.getId());
-                        loadData(); // Refrescar lista
+                        loadData();
                         Snackbar.make(rv, R.string.routine_deleted, Snackbar.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Toast.makeText(this, R.string.error_delete, Toast.LENGTH_SHORT).show();
