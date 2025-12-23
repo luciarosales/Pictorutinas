@@ -33,7 +33,7 @@ public class EditRoutineActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Muestra la flecha
-            getSupportActionBar().setTitle("Modificar Rutina");    // Cambia el texto de arriba
+            getSupportActionBar().setTitle(getString(R.string.edit_routine));
         }
 
         repo = new RoutineRepository(this);
