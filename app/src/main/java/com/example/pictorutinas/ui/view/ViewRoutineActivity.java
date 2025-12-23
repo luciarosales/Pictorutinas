@@ -88,7 +88,7 @@ public class ViewRoutineActivity extends AppCompatActivity {
         // Actualiza el contador (ej: "Paso 1 de 5")
         tvCount.setText(getString(R.string.step_x_of_n, index + 1, steps.size()));
 
-        // Solo habilitamos el botón atrás si no estamos en el primer paso
+        // Solo activamos el botón atrás si no estamos en el primer paso
         btnPrev.setEnabled(index > 0);
     }
 }

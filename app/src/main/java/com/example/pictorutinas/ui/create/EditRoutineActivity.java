@@ -22,7 +22,7 @@ public class EditRoutineActivity extends AppCompatActivity {
     private RoutineRepository repo;
     private EditText etName;
 
-    // Listas y Adaptadores (Igual que en la creación)
+
     private List<Step> selectedSteps = new ArrayList<>();
     private SelectedStepsAdapter stepsAdapter;
 
@@ -39,7 +39,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         repo = new RoutineRepository(this);
         etName = findViewById(R.id.etRoutineName);
 
-        // 1. Configurar RECYCLERVIEW DE OPCIONES (Arriba - Cuadrícula)
+        // 1. Configurar RECYCLERVIEW DE OPCIONES
         RecyclerView rvPictos = findViewById(R.id.rvAvailablePictos);
         rvPictos.setLayoutManager(new GridLayoutManager(this, 4));
         rvPictos.setAdapter(new PictogramAdapter(getAvailablePictos(), step -> {
@@ -48,7 +48,7 @@ public class EditRoutineActivity extends AppCompatActivity {
             stepsAdapter.notifyDataSetChanged();
         }));
 
-        // 2. Configurar RECYCLERVIEW SELECCIONADOS (Abajo - Horizontal)
+        // 2. Configurar RECYCLERVIEW SELECCIONADOS
         RecyclerView rvSelected = findViewById(R.id.rvSelectedSteps);
         rvSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -67,7 +67,7 @@ public class EditRoutineActivity extends AppCompatActivity {
             finish();
         }
 
-        // 4. Botón de Actualizar
+        // 4. Botón de Modificar
         findViewById(R.id.btnUpdate).setOnClickListener(v -> updateRoutine());
     }
 
@@ -96,7 +96,7 @@ public class EditRoutineActivity extends AppCompatActivity {
             return;
         }
 
-        // Guardamos los cambios
+        // Guardamos cambios
         repo.updateRoutineWithSteps(routineId, name, selectedSteps);
 
         Toast.makeText(this, R.string.routine_updated, Toast.LENGTH_SHORT).show();
@@ -112,7 +112,7 @@ public class EditRoutineActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        finish(); // Cierra la actividad actual y vuelve a la principal
+        finish();
         return true;
     }
 }

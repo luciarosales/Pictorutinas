@@ -135,25 +135,24 @@ public class RoutineRepository {
     public void updateRoutineWithSteps(long routineId, String nuevoNombre, List<Step> nuevosPasos) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Iniciamos una transacción para que guarde
         db.beginTransaction();
         try {
-            // 1. Actualizar el nombre de la rutina
+            // 1. Actualizamos el nombre de la rutina
             ContentValues values = new ContentValues();
             values.put("nombre", nuevoNombre);
             db.update("rutinas", values, "id = ?", new String[]{String.valueOf(routineId)});
 
-            // 2. Borrar los pasos antiguos de esta rutina
+            // 2. Borramos los pasos antiguos de esta rutina
             db.delete("pasos", "rutina_id = ?", new String[]{String.valueOf(routineId)});
 
-            // 3. Insertar los nuevos pasos (los que están ahora en la lista)
+            // 3. Insertamos los nuevos pasos
             for (int i = 0; i < nuevosPasos.size(); i++) {
                 Step s = nuevosPasos.get(i);
                 ContentValues stepValues = new ContentValues();
                 stepValues.put("rutina_id", routineId);
                 stepValues.put("texto_key", s.getTextKey());
                 stepValues.put("imagen_res", s.getImageResName());
-                stepValues.put("orden", i); // Guardamos el orden actual
+                stepValues.put("orden", i);
                 db.insert("pasos", null, stepValues);
             }
 

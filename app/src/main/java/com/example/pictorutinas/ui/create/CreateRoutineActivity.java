@@ -23,7 +23,7 @@ public class CreateRoutineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_routine);
 
-        //Flecha hacia atrás
+        //Flecha Menú principal
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
