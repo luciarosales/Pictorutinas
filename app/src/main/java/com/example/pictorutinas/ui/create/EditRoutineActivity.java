@@ -1,14 +1,10 @@
 package com.example.pictorutinas.ui.create;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +22,7 @@ public class EditRoutineActivity extends AppCompatActivity {
     private RoutineRepository repo;
     private EditText etName;
 
+
     private List<Step> selectedSteps = new ArrayList<>();
     private SelectedStepsAdapter stepsAdapter;
 
@@ -34,19 +31,8 @@ public class EditRoutineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_routine);
 
-        // --- SOLUCIÓN PARA EL CORTE SUPERIOR ---
-        // Buscamos la vista raíz por el ID "main" que definimos en el XML
-        View mainView = findViewById(R.id.main);
-        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Aplicamos padding superior e inferior dinámico
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        // ---------------------------------------
-
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Muestra la flecha
             getSupportActionBar().setTitle(getString(R.string.edit_routine));
         }
 
@@ -57,6 +43,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         RecyclerView rvPictos = findViewById(R.id.rvAvailablePictos);
         rvPictos.setLayoutManager(new GridLayoutManager(this, 4));
         rvPictos.setAdapter(new PictogramAdapter(getAvailablePictos(), step -> {
+            // Al pulsar arriba, se añade a la lista de abajo
             selectedSteps.add(new Step(step.getTextKey(), step.getImageResName()));
             stepsAdapter.notifyDataSetChanged();
         }));
@@ -66,6 +53,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         rvSelected.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         stepsAdapter = new SelectedStepsAdapter(selectedSteps, pos -> {
+            // Al pulsar en el botón de eliminar de abajo, se quita
             selectedSteps.remove(pos);
             stepsAdapter.notifyDataSetChanged();
         });
@@ -87,6 +75,8 @@ public class EditRoutineActivity extends AppCompatActivity {
         Routine r = repo.getRoutineById(routineId);
         if (r != null) {
             etName.setText(r.getName());
+
+            // Cargamos los pasos que ya existen en la base de datos
             List<Step> dbSteps = repo.getStepsByRoutineId(routineId);
             if (dbSteps != null) {
                 selectedSteps.clear();
@@ -105,7 +95,10 @@ public class EditRoutineActivity extends AppCompatActivity {
                     .show();
             return;
         }
+
+        // Guardamos cambios
         repo.updateRoutineWithSteps(routineId, name, selectedSteps);
+
         Toast.makeText(this, R.string.routine_updated, Toast.LENGTH_SHORT).show();
         finish();
     }

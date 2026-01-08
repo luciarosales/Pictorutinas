@@ -9,9 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,14 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // --- SOLUCIÓN DEFINITIVA PARA EL CORTE SUPERIOR ---
-        View mainContainer = findViewById(android.R.id.content);
-        ViewCompat.setOnApplyWindowInsetsListener(mainContainer, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Aplicamos margen superior para evitar la barra de estado y la ActionBar
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return WindowInsetsCompat.CONSUMED;
-        });
 
         repo = new RoutineRepository(this);
         rv = findViewById(R.id.rvRoutines);
@@ -51,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         llEmptyState = findViewById(R.id.llEmptyState);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
+
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+
 
         findViewById(R.id.fabAdd).setOnClickListener(v ->
                 startActivity(new Intent(this, CreateRoutineActivity.class)));
@@ -85,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateRecyclerView(List<Routine> list) {
+
         if (list.isEmpty()) {
             llEmptyState.setVisibility(View.VISIBLE);
             rv.setVisibility(View.GONE);
@@ -92,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             llEmptyState.setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
         }
+
 
         RoutineAdapter adapter = new RoutineAdapter(
                 list,
